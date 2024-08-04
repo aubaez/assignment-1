@@ -90,9 +90,15 @@ int main(int argc, char *argv[])
     CHECK_ERR(err, "clCreateKernel");
 
     //@@ Allocate GPU memory here
-
+    device_a = clCreateBuffer(context, CL_MEM_READ_ONLY, host_a.shape[0]*host_a.shape[1],sizeof(float),NULL,&err);
+    CHECK_ERR(err,"clCreateBuffer device_a");
+    device_b = clCreateBuffer(context, CL_MEM_READ_ONLY, host_b.shape[0]*host_b.shape[1],sizeof(float),NULL,&err);
+    CHECK_ERR(err,"clCreateBuffer device_b");
+    device_c = clCreateBuffer(context, CL_MEM_WRITE_ONLY, host_c.shape[0]*host_c.shape[1],sizeof(float),NULL,&err);
+    CHECK_ERR(err,"clCreateBuffer device_c");
     //@@ Copy memory to the GPU here
-
+        // read/write buffers
+        
     // Set the arguments to our compute kernel
     unsigned int size_a = host_a.shape[0] * host_a.shape[1];
     err = clSetKernelArg(kernel, 0, sizeof(cl_mem), &device_a);
@@ -105,7 +111,8 @@ int main(int argc, char *argv[])
     CHECK_ERR(err, "clSetKernelArg 3");
 
     //@@ Initialize the global size and local size here
-
+    global_item_size = size_a;
+    local_item_size = 1;
     //@@ Launch the GPU Kernel here
 
     //@@ Copy the GPU memory back to the CPU here
